@@ -1,27 +1,58 @@
+require('dotenv').config()
+
 module.exports = {
+  flags: {
+    PRESERVE_WEBPACK_CACHE: true,
+  },
   siteMetadata: {
-    title: "100DaysOfGatsby",
+    title: 'AudioC0RE',
+    author: 'Sean Campbell',
+    siteUrl: 'http://audioc0re.com',
+    siteRepo: 'https://github.com/natac13/100DaysOfGatsby',
   },
   plugins: [
+    `gatsby-plugin-top-layout`,
     {
-      resolve: "gatsby-source-contentful",
+      resolve: 'gatsby-plugin-material-ui',
+      // If you want to use styled components you should change the injection order.
       options: {
-        accessToken: "rxh7TOIs9pjx7zWLdT2GicwrtIIeQL1wnIxYuWXxJD8",
-        spaceId: "",
+        stylesProvider: {
+          injectFirst: true,
+        },
       },
     },
-    "gatsby-plugin-emotion",
-    "gatsby-plugin-sharp",
-    "gatsby-plugin-react-helmet",
-    "gatsby-plugin-sitemap",
-    "gatsby-transformer-sharp",
+    `gatsby-plugin-use-dark-mode`,
     {
-      resolve: "gatsby-source-filesystem",
+      resolve: 'gatsby-source-contentful',
       options: {
-        name: "images",
-        path: "./src/images/",
+        accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
+        spaceId: process.env.CONTENTFUL_SPACE_ID,
       },
-      __key: "images",
+    },
+    'gatsby-plugin-emotion',
+    'gatsby-plugin-sharp',
+    'gatsby-plugin-react-helmet',
+    'gatsby-plugin-sitemap',
+    'gatsby-transformer-sharp',
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: 'images',
+        path: './src/images/',
+      },
+      __key: 'images',
+    },
+    {
+      resolve: `gatsby-plugin-eslint`,
+      options: {
+        test: /\.[t|j]s$|\.[t|j]sx$/,
+        exclude: /(node_modules|.cache|public)/,
+        stages: ['develop'],
+        options: {
+          emitWarning: true,
+          failOnError: false,
+        },
+      },
     },
   ],
-};
+}
